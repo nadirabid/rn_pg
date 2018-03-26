@@ -11,7 +11,7 @@
   "compilerOptions": {
     "target": "es2017",
     "module": "commonjs",
-    "outDir": "build/main",
+    "outDir": "build",
     "rootDir": "src",
     "strict": true,
     "esModuleInterop": true
