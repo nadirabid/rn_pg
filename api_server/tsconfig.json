@@ -1,0 +1,19 @@
+{
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+    "build"
+  ],
+  "compileOnSave": false,
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "outDir": "build/main",
+    "rootDir": "src",
+    "strict": true,
+    "esModuleInterop": true
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "api_server",
+  "version": "1.0.0",
+  "description": "The Ryden API Server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "start:prod": "node dist/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nadirabid/ryden.git"
+  },
+  "author": "Nadir Muzaffar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nadirabid/ryden/issues"
+  },
+  "homepage": "https://github.com/nadirabid/ryden#readme",
+  "dependencies": {
+    "@types/express": "^4.11.1",
+    "express": "^4.16.3",
+    "express-graphql": "^0.6.12",
+    "graphql": "^0.13.2"
+  },
+  "devDependencies": {
+    "@types/node": "^9.6.0",
+    "ts-node": "^5.0.1",
+    "typescript": "^2.7.2"
+  }
+}
