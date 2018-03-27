@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "migrations:run": "typeorm migrations:run",
+    "migrations:create": "ts-node typeorm migration:generate",
+    "migrations:run": "ts-node ,/node_modules/.bin/typeorm migration:run",
     "migrations:revert": "typeorm migrations:revert",
     "start": "node index.js",
     "start:prod": "tsc && node build/main.js"
@@ -19,7 +20,7 @@
     "express-graphql": "^0.6.12",
     "graphql": "^0.13.2",
     "pg": "^7.4.1",
-    "typeorm": "^0.1.16"
+    "typeorm": "^0.1.18"
   },
   "devDependencies": {
     "ts-node": "^5.0.1",

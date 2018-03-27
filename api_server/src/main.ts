@@ -1,86 +1,34 @@
 import express from 'express';
 import http from 'http';
 import bodyParser from 'body-parser';
-import convict from 'convict';
-import path from 'path';
-import { createConnection, Connection } from 'typeorm';
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import config from './config';
+import createConnection from './db/createConnection';
+import { Connection } from 'typeorm';
 
-(async () => {
+async function startApp() {
+    // setup database
+    const conn: Connection = await createConnection(config);
 
-// setup config
-const config: convict.Config = convict({
-    port: {
-        'arg': 'port',
-        'default': null,
-        'format': 'port',
-    },
-    db: {
-        database: {
-            'arg': 'db.database',
-            'default': null,
-            'format': String,
-        },
-        host: {
-            'arg': 'db.host',
-            'default': null,
-            'format': 'url'
-        },
-        port: {
-            'arg': 'db.port',
-            'default': null,
-            'format': 'port',
-        },
-        username: {
-            'arg': 'db.username',
-            'default': null,
-            'format': String,
-        },
-        password: {
-            'arg': 'db.password',
-            'default': null,
-            format: String
-        }
-    }
-});
+    // create app
+    const app: express.Express = express();
+    app.use(bodyParser.json());
 
-config.loadFile(path.join(__dirname, '../conf/development.json'));
-config.validate();
+    // start server
+    const server: http.Server = http.createServer(app);
 
-// setup database
-const options: PostgresConnectionOptions = {
-    type: 'postgres',
-    host: config.get('db.host'),
-    port: config.get('db.port'),
-    username: config.get('db.username'),
-    password: config.get('db.password'),
-    database: config.get('db.database'),
-    synchronize: true,
-    logging: false,
-    entities: [
-        path.join(__dirname, '/entities/**/*.ts')
-    ]
-};
+    server.listen(config.get('port'));
 
-const conn: Connection = await createConnection(options);
+    server.on('listening', () => {
+        console.log(`Server listening on ${config.get('port')}`);
+    });
 
-// create app
-const app: express.Express = express();
-app.use(bodyParser.json());
+    server.on('error', (err: Error) => {
+        console.error('Server crapped out: ', err);
+    });
 
-// start server
-const server: http.Server = http.createServer(app);
+    // await conn.close();
+    // console.log('Connection closed')
+}
 
-server.listen(config.get('port'));
+startApp();
 
-server.on('listening', () => {
-    console.log(`Server listening on ${config.get('port')}`);
-});
-
-server.on('error', (err: Error) => {
-    console.error('Server crapped out: ', err);
-});
-
-await conn.close();
-
-})();
