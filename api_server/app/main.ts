@@ -1,34 +1,39 @@
-import express from 'express';
-import http from 'http';
-import bodyParser from 'body-parser';
+import Koa from 'koa';
+import Router from 'koa-router';
+import bodyParser from 'koa-bodyparser';
+import graphqlHTTP from 'koa-graphql';
+import chalk from 'chalk';
+
 import config from './config';
 import createConnection from './db/createConnection';
-import { Connection } from 'typeorm';
+import { root, schema } from './graphql/schema';
 
-async function startApp() {
+async function runApp() {
     // setup database
-    const conn: Connection = await createConnection(config);
+    await createConnection(config);
+
+    // setup router
+    const router = new Router();
+    router.all('/graphql', graphqlHTTP({
+        schema: schema,
+        rootValue: root,
+        graphiql: true
+    }));
 
     // create app
-    const app: express.Express = express();
-    app.use(bodyParser.json());
+    const app = new Koa();
 
-    // start server
-    const server: http.Server = http.createServer(app);
+    app.use(bodyParser());
+    app.use(router.routes());
 
-    server.listen(config.get('port'));
+    app.listen(config.get('port'));
 
-    server.on('listening', () => {
-        console.log(`Server listening on ${config.get('port')}`);
-    });
-
-    server.on('error', (err: Error) => {
+    app.on('error', (err: Error) => {
         console.error('Server crapped out: ', err);
     });
 
-    // await conn.close();
-    // console.log('Connection closed')
+    const url = chalk.underline.greenBright(`http://localhost:${config.get('port')}`);
+    console.log(`Server running at: ${url}`);
 }
 
-startApp();
-
+runApp();
