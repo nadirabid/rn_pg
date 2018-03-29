@@ -1,30 +1,55 @@
 import { buildSchema} from 'graphql';
 
 export var schema = buildSchema(`
+  type Activity {
+     id: ID!
+     userId: ID!
+     type: String
+  }
+  
   type User {
-     id: Int!
+     id: ID!
      firstName: String
      lastName: String
+     activitiesByUserId(userId: ID!): [Activity]
   }
   
   type Query {
-    
-    quoteOfTheDay: String
-    random: Float!
-    rollThreeDice: [Int]
+    user(id: ID!): User
+    activitiesByUserId(userId: ID): [Activity]
   }
 `);
 
+const activites = [
+    {
+        id: 1,
+        userId: 3,
+        type: 'running',
+    },
+    {
+        id: 2,
+        userId: 3,
+        type: 'walking',
+    },
+    {
+        id: 3,
+        userId: 4,
+        type: 'biking'
+    }
+];
+
 // The root provides a resolver function for each API endpoint
 export var root = {
-    quoteOfTheDay: () => {
-        return Math.random() < 0.5 ? 'Take it easy' : 'Salvation lies within';
+    user: ({ id }: { id: number }) => {
+        return {
+            id: 1,
+            firstName: 'nadir',
+            lastName: 'muzaffar',
+            activitiesByUserId: root.activitiesByUserId({ userId: id })
+        }
     },
-    random: () => {
-        return Math.random();
-    },
-    rollThreeDice: () => {
-        return [1, 2, 3].map(_ => 1 + Math.floor(Math.random() * 6));
-    },
+    activitiesByUserId: ({ userId }: { userId: number }) => {
+        return activites.filter(a => a.userId == userId);
+    }
 };
 

@@ -10,8 +10,13 @@ import { root, schema } from './graphql/schema';
 
 async function runApp() {
     // setup database
-    await createConnection(config);
-
+    try {
+        await createConnection(config);
+    } catch (e) {
+        console.error(e);
+        console.log(chalk.redBright('Are you sure PostgreSQL is running?'));
+        return;
+    }
     // setup router
     const router = new Router();
     router.all('/graphql', graphqlHTTP({
