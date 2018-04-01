@@ -1,11 +1,9 @@
 {
-  "include": [
-    "app/**/*.ts"
-  ],
   "exclude": [
     "node_modules",
-    "**/*.spec.ts",
-    "build"
+    "build",
+    ".vscode",
+    ".idea"
   ],
   "compileOnSave": false,
   "compilerOptions": {
@@ -19,9 +17,6 @@
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false,
     "moduleResolution": "node",
-    "sourceMap": true,
-    "typeRoots": [
-      "types" 
-    ]
+    "sourceMap": true
   }
 }

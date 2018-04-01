@@ -1,7 +1,7 @@
 import Koa from 'koa';
 import Router from 'koa-router';
 import bodyParser from 'koa-bodyparser';
-import graphqlHTTP from 'koa-graphql'
+import graphqlHTTP from 'koa-graphql';
 import chalk from 'chalk';
 import { Connection } from 'typeorm';
 
