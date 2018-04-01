@@ -9,6 +9,11 @@ const config: convict.Config = convict({
         'default': null,
         'format': 'port',
     },
+    graphiql: {
+        'arg': 'graphiql',
+        'default': null,
+        'format': 'Boolean',
+    },
     db: {
         database: {
             'arg': 'db.database',

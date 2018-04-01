@@ -15,7 +15,7 @@ export default async function(config: convict.Config): Promise<Connection> {
         synchronize: config.get('db.synchronize'),
         logging: true,
         entities: [
-            path.join(__dirname, '../entities/*.ts')
+            path.join(__dirname, './entities/*.ts')
         ],
         migrations: [
             __dirname + "/migrations/*{.js,.ts}"

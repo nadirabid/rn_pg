@@ -28,6 +28,7 @@
     "koa-bodyparser": "^4.2.0",
     "koa-graphql": "^0.7.5",
     "koa-router": "^7.4.0",
+    "npm": "^5.8.0",
     "pg": "^7.4.1",
     "typeorm": "^0.1.18"
   },

@@ -1,55 +1,28 @@
 import { buildSchema} from 'graphql';
+import fs from 'fs'
+import path from 'path';
 
-export var schema = buildSchema(`
-  type Activity {
-     id: ID!
-     userId: ID!
-     type: String
-  }
-  
-  type User {
-     id: ID!
-     firstName: String
-     lastName: String
-     activitiesByUserId(userId: ID!): [Activity]
-  }
-  
-  type Query {
-    user(id: ID!): User
-    activitiesByUserId(userId: ID): [Activity]
-  }
-`);
-
-const activites = [
-    {
-        id: 1,
-        userId: 3,
-        type: 'running',
-    },
-    {
-        id: 2,
-        userId: 3,
-        type: 'walking',
-    },
-    {
-        id: 3,
-        userId: 4,
-        type: 'biking'
-    }
-];
+export const schema = buildSchema(fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf8'));
 
 // The root provides a resolver function for each API endpoint
-export var root = {
+export const rootResolver = {
     user: ({ id }: { id: number }) => {
         return {
             id: 1,
             firstName: 'nadir',
-            lastName: 'muzaffar',
-            activitiesByUserId: root.activitiesByUserId({ userId: id })
+            lastName: 'muzaffar'
         }
     },
-    activitiesByUserId: ({ userId }: { userId: number }) => {
-        return activites.filter(a => a.userId == userId);
+    activity: ({ id }: { id: number }) => {
+        return {
+            id: 1,
+            userId: 1
+        }
+    },
+    createUser: ({ firstName, lastName }: { firstName: string, lastName: string }) => {
+        return {};
+    },
+    createActivity: ({ userID }: { userID: number }) => {
+        return {};
     }
 };
-

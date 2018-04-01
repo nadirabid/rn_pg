@@ -6,23 +6,29 @@ import chalk from 'chalk';
 
 import config from './config';
 import createConnection from './db/createConnection';
-import { root, schema } from './graphql/schema';
+import seedData from './db/seedData';
+import { rootResolver, schema } from './graphql/schema';
+import {Connection} from "typeorm";
 
 async function runApp() {
     // setup database
+    let conn: Connection;
     try {
-        await createConnection(config);
+        conn = await createConnection(config);
     } catch (e) {
         console.error(e);
         console.log(chalk.redBright('Are you sure PostgreSQL is running?'));
         return;
     }
+
+    seedData(conn);
+
     // setup router
     const router = new Router();
     router.all('/graphql', graphqlHTTP({
         schema: schema,
-        rootValue: root,
-        graphiql: true
+        rootValue: rootResolver,
+        graphiql: config.get('graphiql')
     }));
 
     // create app

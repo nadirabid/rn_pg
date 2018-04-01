@@ -1,6 +1,6 @@
 {
   "include": [
-    "src/**/*.ts"
+    "app/**/*.ts"
   ],
   "exclude": [
     "node_modules",
@@ -18,6 +18,9 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "moduleResolution": "node",
-    "sourceMap": true
+    "sourceMap": true,
+    "typeRoots": [
+      "./types" 
+    ]
   }
 }

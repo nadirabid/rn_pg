@@ -1,5 +1,6 @@
 {
   "port": 8000,
+  "graphiql": true,
   "db": {
     "database": "ryden",
     "host": "localhost",
@@ -10,3 +11,4 @@
     "synchronize": true
   }
 }
+
