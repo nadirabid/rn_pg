@@ -4,11 +4,14 @@ import bodyParser from 'koa-bodyparser';
 import graphqlHTTP from 'koa-graphql';
 import chalk from 'chalk';
 import { Connection } from 'typeorm';
+import path from 'path';
+import fs from 'fs'
+import { buildSchema } from 'graphql';
 
 import config from './config';
 import createConnection from './db/createConnection';
 import seedData from './db/seedData';
-import { rootResolver, schema } from './graphql/schema';
+import rootResolver from './graphql/rootResolver';
 
 async function runApp() {
     // setup database
@@ -26,7 +29,7 @@ async function runApp() {
     // setup router
     const router = new Router();
     router.all('/graphql', graphqlHTTP({
-        schema: schema,
+        schema: buildSchema(fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf8')),
         rootValue: rootResolver,
         context: {
             dbConn: conn

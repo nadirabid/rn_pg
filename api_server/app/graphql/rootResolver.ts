@@ -1,15 +1,11 @@
-import { buildSchema } from 'graphql';
-import fs from 'fs'
-import path from 'path';
+
 import { Connection } from 'typeorm';
 
 import User from '../db/entities/User';
 import Activity from '../db/entities/Activity';
 
-export const schema = buildSchema(fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf8'));
-
 // The root provides a resolver function for each API endpoint
-export const rootResolver = {
+export default {
     user: async ({ id }: { id: number }, { dbConn }: { dbConn: Connection }) => {
         const userRepository = dbConn.getRepository(User);
 
