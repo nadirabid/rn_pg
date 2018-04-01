@@ -8,7 +8,7 @@ import config from './config';
 import createConnection from './db/createConnection';
 import seedData from './db/seedData';
 import { rootResolver, schema } from './graphql/schema';
-import {Connection} from "typeorm";
+import {Connection} from 'typeorm';
 
 async function runApp() {
     // setup database
@@ -21,13 +21,14 @@ async function runApp() {
         return;
     }
 
-    seedData(conn);
-
     // setup router
     const router = new Router();
     router.all('/graphql', graphqlHTTP({
         schema: schema,
         rootValue: rootResolver,
+        context: {
+            dbConn: conn
+        },
         graphiql: config.get('graphiql')
     }));
 
