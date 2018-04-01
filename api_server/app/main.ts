@@ -1,14 +1,14 @@
 import Koa from 'koa';
 import Router from 'koa-router';
 import bodyParser from 'koa-bodyparser';
-import graphqlHTTP from 'koa-graphql';
+import graphqlHTTP from 'koa-graphql'
 import chalk from 'chalk';
+import { Connection } from 'typeorm';
 
 import config from './config';
 import createConnection from './db/createConnection';
 import seedData from './db/seedData';
 import { rootResolver, schema } from './graphql/schema';
-import {Connection} from 'typeorm';
 
 async function runApp() {
     // setup database
@@ -21,6 +21,8 @@ async function runApp() {
         return;
     }
 
+    await seedData(conn);
+    
     // setup router
     const router = new Router();
     router.all('/graphql', graphqlHTTP({

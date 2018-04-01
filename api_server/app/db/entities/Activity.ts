@@ -5,7 +5,7 @@ import User from './User';
 
 @Entity()
 export default class Activity {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn() 
     id: number;
 
     @ManyToOne(type => User, user => user.activities)

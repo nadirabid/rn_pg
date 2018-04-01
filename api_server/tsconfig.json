@@ -17,10 +17,11 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false,
     "moduleResolution": "node",
     "sourceMap": true,
     "typeRoots": [
-      "./types" 
+      "types" 
     ]
   }
 }

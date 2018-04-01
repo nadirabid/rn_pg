@@ -22,11 +22,4 @@ export default async function seedData(conn: Connection) {
     activity2.user = userNadir;
 
     await activityRepository.save(activity2);
-
-    const activitiesForNadir = await activityRepository
-        .createQueryBuilder('activity')
-        .where('activity.user = :userID', {  userID: userNadir.id })
-        .getMany() 
-
-    console.log('My activities', activitiesForNadir);
 }

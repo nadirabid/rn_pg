@@ -13,7 +13,12 @@ export const rootResolver = {
     user: async ({ id }: { id: number }, { dbConn }: { dbConn: Connection }) => {
         const userRepository = dbConn.getRepository(User);
 
-        return userRepository.findOneById(id);
+        return userRepository
+            .createQueryBuilder('user')
+            .select()
+            .innerJoinAndSelect('user.activities', 'activity')
+            .where(`activity.user = ${id}`)
+            .getOne()
     },
     activity: async ({ id }: { id: number }, { dbConn }: { dbConn: Connection }) => {
         const activityRepository = dbConn.getRepository(Activity);
