@@ -1,5 +1,5 @@
 // Type definitions for koa-graphql
-// Project: https://www.npmjs.org/package/express-graphql
+// Project: https://www.npmjs.org/package/koa-graphql
 // Definitions by: Isman Usoh <https://github.com/isman-usoh>
 //                 Nitin Tutlani <https://github.com/nitintutlani>
 //                 Daniel Fader <https://github.com/hubel>
