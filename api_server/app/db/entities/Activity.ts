@@ -1,4 +1,4 @@
-import {Entity, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
+import {Entity, ManyToOne, PrimaryGeneratedColumn, Connection} from 'typeorm';
 import 'reflect-metadata';
 
 import User from './User';
@@ -10,4 +10,14 @@ export default class Activity {
 
     @ManyToOne(type => User, user => user.activities)
     user: User;
+
+    getUser(_: any, { dbConn }: { dbConn: Connection }): Promise<User | undefined> {
+        const userRepository = dbConn.getRepository(User);
+
+        return userRepository
+            .createQueryBuilder('user')
+            .select()
+            .innerJoin('user.activities', 'activity',`user.id = activity.user AND activity.id = ${this.id}`)
+            .getOne();
+    }
 }

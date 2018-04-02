@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, OneToMany} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, Connection } from 'typeorm';
 import 'reflect-metadata';
 
 import Activity from './Activity';
@@ -17,7 +17,13 @@ export default class User {
     @OneToMany(type => Activity, activity => activity.user)
     activities: Activity[];
 
-    getActivities(args: any, ctx: any, info: any): Activity[] {
-        return this.activities;
+    getActivities(_: any, { dbConn }: { dbConn: Connection }): Promise<Activity[]> {
+        const activityRepository = dbConn.getRepository(Activity);
+
+        return activityRepository
+            .createQueryBuilder('activity')
+            .select()
+            .where(`activity.user = ${this.id}`)
+            .getMany();
     }
 }

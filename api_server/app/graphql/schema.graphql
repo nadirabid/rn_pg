@@ -1,6 +1,6 @@
 type Activity {
     id: ID!
-    user: User
+    getUser: User
 }
 
 type User {

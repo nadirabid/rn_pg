@@ -9,12 +9,7 @@ export default {
     async user({ id }: { id: number }, { dbConn }: { dbConn: Connection }) {
         const userRepository = dbConn.getRepository(User);
 
-        return userRepository
-            .createQueryBuilder('user')
-            .select()
-            .where(`activity.user = ${id}`)
-            .innerJoinAndSelect('user.activities', 'activity')
-            .getOne();
+        return userRepository.findOneById(id);
     },
 
     async activity({ id }: { id: number }, { dbConn }: { dbConn: Connection }) {
