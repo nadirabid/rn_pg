@@ -1,6 +1,7 @@
 # API Server
 
 ### Technologies
+* [Typescript](http://typescriptlang.org)
 * [Koa](http://koajs.com)
 * [Typeorm](http://koajs.com)
 * [GraphQL](http://graphql.org)
