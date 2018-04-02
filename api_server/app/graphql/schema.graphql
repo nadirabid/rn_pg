@@ -7,7 +7,7 @@ type User {
     id: ID!
     firstName: String!
     lastName: String!
-    activities: [Activity]
+    getActivities: [Activity]
 }
 
 type Query {

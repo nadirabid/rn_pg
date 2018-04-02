@@ -16,4 +16,8 @@ export default class User {
 
     @OneToMany(type => Activity, activity => activity.user)
     activities: Activity[];
+
+    getActivities(args: any, ctx: any, info: any): Activity[] {
+        return this.activities;
+    }
 }

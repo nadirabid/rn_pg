@@ -2,26 +2,28 @@
 import { Connection } from 'typeorm';
 
 import User from '../db/entities/User';
-import Activity from '../db/entities/Activity';
+import Activity from '../db/entities/Activity'; 
 
 // The root provides a resolver function for each API endpoint
 export default {
-    user: async ({ id }: { id: number }, { dbConn }: { dbConn: Connection }) => {
+    async user({ id }: { id: number }, { dbConn }: { dbConn: Connection }) {
         const userRepository = dbConn.getRepository(User);
 
         return userRepository
             .createQueryBuilder('user')
             .select()
-            .innerJoinAndSelect('user.activities', 'activity')
             .where(`activity.user = ${id}`)
-            .getOne()
+            .innerJoinAndSelect('user.activities', 'activity')
+            .getOne();
     },
-    activity: async ({ id }: { id: number }, { dbConn }: { dbConn: Connection }) => {
+
+    async activity({ id }: { id: number }, { dbConn }: { dbConn: Connection }) {
         const activityRepository = dbConn.getRepository(Activity);
 
         return await activityRepository.findOneById(id);
     },
-    createUser: async ({ firstName, lastName }: { firstName: string, lastName: string }, { dbConn }: { dbConn: Connection }) => {
+
+    async createUser({ firstName, lastName }: { firstName: string, lastName: string }, { dbConn }: { dbConn: Connection }) {
         const userRepository = dbConn.getRepository(User);
 
         const user = new User();
@@ -30,7 +32,8 @@ export default {
 
         return userRepository.save(user);
     },
-    createActivity: async ({ userID }: { userID: number }, { dbConn }: { dbConn: Connection }) => {
+
+    async createActivity({ userID }: { userID: number }, { dbConn }: { dbConn: Connection }) {
         const activityRepository = dbConn.getRepository(Activity);
         const userRepository = dbConn.getRepository(User);
 

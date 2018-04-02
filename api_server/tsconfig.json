@@ -10,13 +10,16 @@
     "target": "es2017",
     "module": "commonjs",
     "outDir": "build",
-    "rootDir": "src",
+    "rootDir": "app",
     "strict": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false,
     "moduleResolution": "node",
-    "sourceMap": true
+    "sourceMap": true,
+    "lib": [
+      "esnext.asynciterable"
+    ],
   }
 }

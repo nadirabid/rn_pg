@@ -29,7 +29,7 @@ async function runApp() {
     // setup router
     const router = new Router();
     router.all('/graphql', graphqlHTTP({
-        schema: buildSchema(fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf8')),
+        schema: buildSchema(fs.readFileSync(path.join(__dirname, '/graphql/schema.graphql'), 'utf8')),
         rootValue: rootResolver,
         context: {
             dbConn: conn
