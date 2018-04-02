@@ -5,25 +5,25 @@ import Activity from './Activity';
 
 @Entity()
 export default class User {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    firstName: string;
+  @Column()
+  firstName: string;
 
-    @Column()
-    lastName: string;
+  @Column()
+  lastName: string;
 
-    @OneToMany(type => Activity, activity => activity.user)
-    activities: Activity[];
+  @OneToMany(type => Activity, (activity: Activity) => activity.user)
+  activities: Activity[];
 
-    getActivities(_: any, { dbConn }: { dbConn: Connection }): Promise<Activity[]> {
-        const activityRepository = dbConn.getRepository(Activity);
+  getActivities(_: any, { dbConn }: { dbConn: Connection }): Promise<Activity[]> {
+    const activityRepository = dbConn.getRepository(Activity);
 
-        return activityRepository
-            .createQueryBuilder('activity')
-            .select()
-            .where(`activity.user = ${this.id}`)
-            .getMany();
-    }
+    return activityRepository
+      .createQueryBuilder('activity')
+      .select()
+      .where(`activity.user = ${this.id}`)
+      .getMany();
+  }
 }

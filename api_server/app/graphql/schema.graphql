@@ -1,21 +1,21 @@
 type Activity {
-    id: ID!
-    getUser: User
+  id: ID!
+  getUser: User
 }
 
 type User {
-    id: ID!
-    firstName: String!
-    lastName: String!
-    getActivities: [Activity]
+  id: ID!
+  firstName: String!
+  lastName: String!
+  getActivities: [Activity]
 }
 
 type Query {
-    user(id: ID!): User
-    activity(id: ID!): Activity
+  user(id: ID!): User
+  activity(id: ID!): Activity
 }
 
 type Mutation {
-    createUser(firstName: String!, lastName: String!): User
-    createActivity(userID: ID!): Activity
+  createUser(firstName: String!, lastName: String!): User
+  createActivity(userID: ID!): Activity
 }
