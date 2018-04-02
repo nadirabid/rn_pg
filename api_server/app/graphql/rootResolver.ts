@@ -35,7 +35,7 @@ export default {
     const user = await userRepository.findOneById(userID);
 
     if (user === undefined) {
-      throw new Error(`User by userId of ${userID} does not exist. Cannot create Activity.`);
+      throw `User by userId of ${userID} does not exist. Cannot create Activity.`;
     }
 
     const activity = new Activity();

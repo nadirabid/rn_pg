@@ -3,7 +3,7 @@ import { Connection } from 'typeorm';
 import User from './entities/User';
 import Activity from './entities/Activity';
 
-export default async function seedData(conn: Connection) {
+export default async function seedData(conn: Connection): Promise<void> {
   const userRepository = conn.getRepository(User);
   const activityRepository = conn.getRepository(Activity);
 

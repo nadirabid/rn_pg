@@ -23,17 +23,17 @@ declare module 'koa-graphql' {
       /**
        * A GraphQL schema from graphql-js.
        */
-      schema: Object,
+      schema: any,
 
       /**
        * A value to pass as the context to the graphql() function.
        */
-      context?: Object,
+      context?: any,
 
       /**
        * An object to pass as the rootValue to the graphql() function.
        */
-      rootValue?: Object,
+      rootValue?: any,
 
       /**
        * A boolean to configure whether the output should be pretty-printed.
@@ -45,7 +45,7 @@ declare module 'koa-graphql' {
        * fulfilling a GraphQL operation. If no function is provided, GraphQL's
        * default spec-compliant `formatError` function will be used.
        */
-      formatError?: Function,
+      formatError?: any,
 
       /**
        * A boolean to optionally enable GraphiQL mode.
