@@ -1,23 +1,23 @@
 # API Server
 
-### Technologies
+## Technologies
 * [Typescript](http://typescriptlang.org)
 * [Koa](http://koajs.com)
 * [Typeorm](http://koajs.com)
 * [GraphQL](http://graphql.org)
 
 
-### Requirements
+## Requirements
 
 * [node](https://www.nodejs.org/en) 9
 * [postgresql](https://www.postgresql.org)
 
-### Recommendations
+## Recommendations
 
 * [vscode](https://code.visualstudio.com)
 * [postico](https://eggerapps.at/postico/)
 
-### macOS Setup
+## macOS Setup
 
 1. Install brew
 ```bash
@@ -50,7 +50,7 @@ ALTER USER ryden WITH SUPERUSER;
 CREATE DATABASE ryden;
 ```
 
-### Running
+## Running
 
 ```bash
 cd /path/to/ryden/api_server
@@ -58,7 +58,7 @@ npm install
 npm start
 ```
 
-### Configuration
+## Configuration
 
 > This application follows configuration design principals of a [12 factor application](https://12factor.net).
 
