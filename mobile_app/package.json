@@ -1,22 +1,46 @@
 {
-  "name": "ios",
+  "name": "ryden",
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "tsc": "tsc",
+    "clean": "rimraf artifacts",
+    "build": "npm run clean && npm run tsc --",
+    "lint": "tslint src/**/*.ts",
+    "watch": "npm run build -- -w",
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "start:ios": "npm run build && concurrently -r 'npm run watch' 'react-native run-ios'",
+    "start:android": "npm run build && concurrently -r 'npm run watch' 'react-native run-android'",
+    "test": "jest --coverage"
   },
   "dependencies": {
+    "@types/jest": "^22.2.2",
+    "@types/react": "^16.1.0",
+    "@types/react-native": "^0.52.22",
     "react": "16.3.0",
     "react-native": "0.54.4"
   },
   "devDependencies": {
     "babel-jest": "22.4.3",
     "babel-preset-react-native": "4.0.0",
+    "concurrently": "^3.5.1",
     "jest": "22.4.3",
-    "react-test-renderer": "16.3.0"
+    "react-test-renderer": "16.3.0",
+    "rimraf": "^2.6.2",
+    "tslint": "^5.9.1",
+    "typescript": "^2.7.2"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "coverageDirectory": "coverage",
+    "coverageReporters": [
+      "text-summary",
+      "html"
+    ],
+    "collectCoverageFrom": [
+      "build/**/*.js",
+      "!build/**/*.spec.js",
+      "!build/**/*.index.js"
+    ]
   }
 }

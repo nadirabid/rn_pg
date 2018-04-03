@@ -2,6 +2,10 @@
 #
 .DS_Store
 
+# vscode
+#
+.vscode
+
 # Xcode
 #
 build/
@@ -51,3 +55,7 @@ buck-out/
 */fastlane/report.xml
 */fastlane/Preview.html
 */fastlane/screenshots
+
+# jest
+#
+coverage
