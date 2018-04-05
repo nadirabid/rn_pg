@@ -8,10 +8,10 @@
 // TypeScript Version: 2.3
 
 declare module 'koa-graphql' {
-  import { Request, Response } from 'koa';
-  import { IMiddleware } from 'koa-router';
+  import { Request, Response } from 'koa'
+  import { IMiddleware } from 'koa-router'
 
-  export = graphqlHTTP;
+  export = graphqlHTTP
 
   namespace graphqlHTTP {
     /**
@@ -56,7 +56,7 @@ declare module 'koa-graphql' {
        * An optional function for adding additional metadata to the GraphQL response as a key-value object.
        * The result will be added to "extensions" field in the resulting JSON.
        */
-      extensions?: ((args: ExtenstionsArgs) => any) | ((args: ExtenstionsArgs) => Promise<any>);
+      extensions?: ((args: ExtenstionsArgs) => any) | ((args: ExtenstionsArgs) => Promise<any>)
 
     };
 
@@ -72,5 +72,5 @@ declare module 'koa-graphql' {
   * Middleware for express; takes an options object or function as input to
   * configure behavior, and returns an express middleware.
   */
-  function graphqlHTTP(options: graphqlHTTP.Options): IMiddleware;
+  function graphqlHTTP(options: graphqlHTTP.Options): IMiddleware
 }

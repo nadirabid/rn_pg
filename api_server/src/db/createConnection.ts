@@ -1,7 +1,7 @@
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
-import path from 'path';
-import { Connection, createConnection } from 'typeorm';
-import convict from 'convict';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
+import path from 'path'
+import { Connection, createConnection } from 'typeorm'
+import convict from 'convict'
 
 export default async function (config: convict.Config): Promise<Connection> {
   const options: PostgresConnectionOptions = {
@@ -15,13 +15,13 @@ export default async function (config: convict.Config): Promise<Connection> {
     synchronize: config.get('db.synchronize'),
     logging: true,
     entities: [
-      path.join(__dirname, './entities/*.ts')
+      path.join(__dirname, './entities/*.ts'),
     ],
     migrations: [
-      __dirname + "/migrations/*{.js,.ts}"
+      __dirname + '/migrations/*{.js,.ts}',
     ],
-    migrationsTableName: "ryden_migration_table"
-  };
+    migrationsTableName: 'ryden_migration_table',
+  }
 
-  return createConnection(options);
+  return createConnection(options)
 }

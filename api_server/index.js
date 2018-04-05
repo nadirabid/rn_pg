@@ -1,2 +1,2 @@
-require('ts-node/register');
-require('./app/main');
+require('ts-node/register')
+require('./src/main')
