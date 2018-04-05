@@ -9,7 +9,7 @@
     "lint": "tslint src/**/*.ts",
     "watch": "npm run build -- -w",
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "start:ios": "npm run build && concurrently -r 'npm run watch' 'react-native run-ios'",
+    "start:ios": "npm run build && concurrently -r 'npm run watch' 'react-native run-ios --simulator=\"iPhone X\"'",
     "start:android": "npm run build && concurrently -r 'npm run watch' 'react-native run-android'",
     "test": "jest --coverage"
   },
