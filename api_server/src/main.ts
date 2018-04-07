@@ -12,10 +12,13 @@ import config from './config'
 import createConnection from './db/createConnection'
 import seedData from './db/seedData'
 import rootResolver from './graphql/rootResolver'
+import { Server } from 'http'
 
-async function runApp(): Promise<void> {
+let server: Server
+let conn: Connection
+
+async function startApp(): Promise<void> {
   // setup database
-  let conn: Connection
   try {
     conn = await createConnection(config)
   } catch (e) {
@@ -43,7 +46,7 @@ async function runApp(): Promise<void> {
   app.use(bodyParser())
   app.use(router.routes())
 
-  app.listen(config.get('port'))
+  server = app.listen(config.get('port'))
 
   app.on('error', (err: Error) => {
     console.error('Server crapped out: ', err)
@@ -53,4 +56,11 @@ async function runApp(): Promise<void> {
   console.log(`Server running at: ${url}`)
 }
 
-runApp()
+function stopApp() {
+  conn.close()
+  server.close()
+}
+
+startApp()
+
+process.on('exit', stopApp)
