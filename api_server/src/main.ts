@@ -11,7 +11,7 @@ import { buildSchema } from 'graphql'
 import config from './config'
 import createConnection from './db/createConnection'
 import seedData from './db/seedData'
-import rootResolver from './graphql/rootResolver'
+import schema from './graphql/schema'
 import { Server } from 'http'
 
 let server: Server
@@ -32,8 +32,7 @@ async function startApp(): Promise<void> {
   // setup router
   const router = new Router()
   router.all('/graphql', graphqlHTTP({
-    schema: buildSchema(fs.readFileSync(path.join(__dirname, '/graphql/schema.graphql'), 'utf8')),
-    rootValue: rootResolver,
+    schema: schema,
     context: {
       dbConn: conn,
     },
@@ -61,6 +60,6 @@ function stopApp() {
   server.close()
 }
 
+// start things up
 startApp()
-
 process.on('exit', stopApp)

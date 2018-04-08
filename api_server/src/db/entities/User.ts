@@ -3,15 +3,6 @@ import 'reflect-metadata'
 
 import Activity from './Activity'
 
-import { globalIdField } from 'graphql-relay'
-
-import {
-  connectionDefinitions,
-  forwardConnectionArgs,
-  connectionFromArraySlice,
-  cursorToOffset,
-} from 'graphql-relay'
-
 @Entity()
 export default class User {
   @PrimaryGeneratedColumn()
