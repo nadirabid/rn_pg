@@ -47,6 +47,8 @@ const { nodeInterface, nodeField, nodesField } = nodeDefinitions(
   },
 )
 
+// querable
+
 const ActivityType: GraphQLObjectType = new GraphQLObjectType({
   name: 'Activity',
   interfaces: [ nodeInterface ],
@@ -82,7 +84,6 @@ const UserType: GraphQLObjectType = new GraphQLObjectType({
       args: connectionArgs,
       resolve: async (user: User, args: any, ctx: any) => {
         const activities = await user.getActivities(args, ctx)
-        console.log('hello world', activities, user.id, user.firstName)
         return connectionFromArray(activities, args)
       },
     },
@@ -122,6 +123,8 @@ const Root: GraphQLObjectType = new GraphQLObjectType({
     },
   },
 })
+
+// mutable
 
 const CreateUserMutation = mutationWithClientMutationId({
   name: 'createUser',
@@ -189,6 +192,8 @@ const Mutation = new GraphQLObjectType({
     createActivity: CreateActivityMutation,
   },
 })
+
+// schema
 
 export default new GraphQLSchema({
   query: Root,
