@@ -17,13 +17,18 @@ export default class User {
   @OneToMany(type => Activity, (activity: Activity) => activity.user)
   activities: Activity[]
 
-  getActivities(_: any, { dbConn }: { dbConn: Connection }): Promise<Activity[]> {
+  getActivities({ first }: { first: number | undefined }, { dbConn }: { dbConn: Connection }): Promise<Activity[]> {
     const activityRepository = dbConn.getRepository(Activity)
 
-    return activityRepository
-      .createQueryBuilder('activity')
+    let query = activityRepository
+      .createQueryBuilder('activity') // this is the Alias. Alias is what you're selecting
       .select()
       .where(`activity.user = ${this.id}`)
-      .getMany()
+
+      if (first) {
+        query = query.take(first)
+      }
+
+      return query.getMany()
   }
 }
