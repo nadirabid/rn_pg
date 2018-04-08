@@ -14,6 +14,7 @@ import {
   connectionDefinitions,
   connectionArgs,
   mutationWithClientMutationId,
+  connectionFromArray,
 } from 'graphql-relay'
 
 import User from '../db/entities/User'
@@ -60,7 +61,10 @@ const ActivityType: GraphQLObjectType = new GraphQLObjectType({
   }),
 })
 
-const { connectionType: ActivityConnection } = connectionDefinitions({ nodeType: ActivityType })
+const {
+  connectionType: ActivityConnection,
+  edgeType: ActivityTypeEdge,
+} = connectionDefinitions({ nodeType: ActivityType })
 
 const UserType: GraphQLObjectType = new GraphQLObjectType({
   name: 'User',
@@ -76,8 +80,10 @@ const UserType: GraphQLObjectType = new GraphQLObjectType({
     getActivities: {
       type: ActivityConnection,
       args: connectionArgs,
-      resolve: (user: User, args: any, ctx: any) => {
-        return user.getActivities(args, ctx)
+      resolve: async (user: User, args: any, ctx: any) => {
+        const activities = await user.getActivities(args, ctx)
+        console.log('hello world', activities, user.id, user.firstName)
+        return connectionFromArray(activities, args)
       },
     },
   }),
