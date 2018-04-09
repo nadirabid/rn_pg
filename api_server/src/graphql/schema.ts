@@ -19,6 +19,7 @@ import {
   connectionFromPromisedArray,
   connectionFromArraySlice,
   cursorToOffset,
+  offsetToCursor,
 } from 'graphql-relay'
 
 import User from '../db/entities/User'
@@ -189,9 +190,10 @@ const CreateActivityMutation = mutationWithClientMutationId({
     },
     activityEdge: {
       type: ActivityTypeEdge,
-      resolve: (activity: Activity) => {
+      resolve: ({ activity, offset }: { activity: Activity, offset: number }) => {
         return {
-          cursor: cursorForObjectInConnection(),
+          cursor: offsetToCursor(offset),
+          node: activity,
         }
       },
     },
@@ -212,7 +214,20 @@ const CreateActivityMutation = mutationWithClientMutationId({
 
     await activityRepository.save(activity)
 
-    return { activity }
+    const rowCount = await dbConn
+      .createQueryBuilder()
+      .select('activity_row.row_number', 'row_number')
+      .addSelect('activity_row.id', 'id')
+      .from(subQuery => {
+        return subQuery
+          .select('activity.id', 'id')
+          .addSelect('row_number() over (order by activity.id)', 'row_number')
+          .from(Activity, 'activity')
+      }, 'activity_row')
+      .where(`activity_row.id = ${activity.id}`)
+      .getRawOne()
+
+    return { activity, offset: rowCount.row_number }
   },
 })
 

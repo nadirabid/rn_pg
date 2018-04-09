@@ -10,7 +10,7 @@ import { buildSchema } from 'graphql'
 
 import config from './config'
 import createConnection from './db/createConnection'
-import seedData from './db/seedData'
+import testQuery from './db/testQuery'
 import schema from './graphql/schema'
 import { Server } from 'http'
 
@@ -27,7 +27,7 @@ async function startApp(): Promise<void> {
     return
   }
 
-  await seedData(conn)
+  await testQuery(conn)
 
   // setup router
   const router = new Router()
