@@ -16,10 +16,14 @@ import {
   mutationWithClientMutationId,
   connectionFromArray,
   cursorForObjectInConnection,
+  connectionFromPromisedArray,
+  connectionFromArraySlice,
+  cursorToOffset,
 } from 'graphql-relay'
 
 import User from '../db/entities/User'
 import Activity from '../db/entities/Activity'
+import { StringDecoder } from 'string_decoder'
 
 const { nodeInterface, nodeField, nodesField } = nodeDefinitions(
   (globalId, { dbConn }: { dbConn: Connection }) => {
@@ -84,9 +88,26 @@ const UserType: GraphQLObjectType = new GraphQLObjectType({
       type: ActivityConnection,
       args: connectionArgs,
       resolve: async (user: User, args: any, ctx: any) => {
-        console.log('args', args)
-        const activities = await user.getActivities(args, ctx)
-        return connectionFromArray(activities, args)
+        let take: number | undefined
+        if (args.first) {
+          take = args.first
+        }
+
+        // after of undefined === skip of 0
+        // after of 0 === skip 0 + 1
+        // after of n === skip n + 1
+
+        let skip: number | undefined
+        if (args.after) {
+          skip = cursorToOffset(args.after) + 1
+        }
+
+        const [activities, count] = await user.getActivities({ take, skip }, ctx)
+
+        return connectionFromArraySlice(activities, args, {
+          sliceStart: skip ? skip : 0,
+          arrayLength: count,
+        })
       },
     },
   }),

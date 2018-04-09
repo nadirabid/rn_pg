@@ -17,7 +17,10 @@ export default class User {
   @OneToMany(type => Activity, (activity: Activity) => activity.user)
   activities: Activity[]
 
-  getActivities({ first }: { first: number | undefined }, { dbConn }: { dbConn: Connection }): Promise<Activity[]> {
+  getActivities(
+    { take, skip }: { take?: number, skip?: number },
+    { dbConn }: { dbConn: Connection },
+  ): Promise<[Activity[], number]> {
     const activityRepository = dbConn.getRepository(Activity)
 
     let query = activityRepository
@@ -25,10 +28,14 @@ export default class User {
       .select()
       .where(`activity.user = ${this.id}`)
 
-      if (first) {
-        query = query.take(first)
-      }
+    if (skip !== undefined) {
+      query = query.skip(skip)
+    }
 
-      return query.getMany()
+    if (take !== undefined) {
+      query = query.take(take)
+    }
+
+    return query.getManyAndCount()
   }
 }
