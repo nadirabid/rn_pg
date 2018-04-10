@@ -24,7 +24,6 @@ import {
 
 import User from '../db/entities/User'
 import Activity from '../db/entities/Activity'
-import { StringDecoder } from 'string_decoder'
 
 const { nodeInterface, nodeField, nodesField } = nodeDefinitions(
   (globalId, { dbConn }: { dbConn: Connection }) => {
@@ -43,9 +42,9 @@ const { nodeInterface, nodeField, nodesField } = nodeDefinitions(
   },
   obj => {
     switch (true) {
-      case obj instanceof UserType:
+      case obj instanceof User:
         return UserType
-      case obj instanceof ActivityType:
+      case obj instanceof Activity:
         return ActivityType
       default:
         return false
@@ -117,32 +116,13 @@ const UserType: GraphQLObjectType = new GraphQLObjectType({
 const Root: GraphQLObjectType = new GraphQLObjectType({
   name: 'Root',
   fields: {
-    user: {
-      type: UserType,
-      args: {
-        id: {
-          type: GraphQLID,
-        },
-      },
-      resolve: (src: any, { id }, { dbConn }: { dbConn: Connection }) => {
-        const { id: userID } = fromGlobalId(id)
+    node: nodeField,
+    nodes: nodesField,
+    users: {
+      type: new GraphQLList(UserType),
+      resolve: async (src: any, args: any, { dbConn }: { dbConn: Connection }) => {
         const userRepository = dbConn.getRepository(User)
-
-        return userRepository.findOneById(userID)
-      },
-    },
-    activity: {
-      type: ActivityType,
-      args: {
-        id: {
-          type: GraphQLID,
-        },
-      },
-      resolve: (src: any, { id }, { dbConn }: { dbConn: Connection }) => {
-        const { id: activityID } = fromGlobalId(id)
-        const activityRepository = dbConn.getRepository(Activity)
-
-        return activityRepository.findOneById(activityID)
+        return userRepository.find()
       },
     },
   },

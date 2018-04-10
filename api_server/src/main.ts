@@ -27,8 +27,6 @@ async function startApp(): Promise<void> {
     return
   }
 
-  await testQuery(conn)
-
   // setup router
   const router = new Router()
   router.all('/graphql', graphqlHTTP({
@@ -56,7 +54,6 @@ async function startApp(): Promise<void> {
 }
 
 function stopApp() {
-  conn.close()
   server.close()
 }
 
