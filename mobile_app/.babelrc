@@ -11,7 +11,6 @@
     "react-native",
     "react-native-stage-0/decorator-support",
     "react",
-    "es2015",
     "stage-0"
   ]
 }

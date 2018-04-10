@@ -17,6 +17,8 @@ import {
 } from 'relay-runtime'
 import { get } from 'lodash'
 
+// TODO: https://github.com/30murgh/relay-native/tree/master/src
+
 // setup Environment
 
 function fetchQuery(operation, variables) {
@@ -82,7 +84,7 @@ export default class App extends Component<Props, State> {
 
         query={graphql`
           query AppQuery {
-            node(id: "VXNlcjox") {
+            user(id: "VXNlcjox") {
                 firstName
                 lastName
             }
