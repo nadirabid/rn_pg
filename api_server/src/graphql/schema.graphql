@@ -1,21 +1,99 @@
-type Activity {
+schema {
+  query: Root
+  mutation: Mutation
+}
+
+type Activity implements Node {
+  """The ID of an object"""
   id: ID!
   getUser: User
 }
 
-type User {
-  id: ID!
-  firstName: String!
-  lastName: String!
-  getActivities: [Activity]
+"""A connection to a list of items."""
+type ActivityConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [ActivityEdge]
 }
 
-type Query {
-  user(id: ID!): User
-  activity(id: ID!): Activity
+"""An edge in a connection."""
+type ActivityEdge {
+  """The item at the end of the edge"""
+  node: Activity
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+input createActivityInput {
+  userID: ID!
+  clientMutationId: String
+}
+
+type createActivityPayload {
+  activity: Activity
+  activityEdge: ActivityEdge
+  clientMutationId: String
+}
+
+input createUserInput {
+  firstName: String!
+  lastName: String!
+  clientMutationId: String
+}
+
+type createUserPayload {
+  user: User
+  clientMutationId: String
 }
 
 type Mutation {
-  createUser(firstName: String!, lastName: String!): User
-  createActivity(userID: ID!): Activity
+  createUser(input: createUserInput!): createUserPayload
+  createActivity(input: createActivityInput!): createActivityPayload
+}
+
+"""An object with an ID"""
+interface Node {
+  """The id of the object."""
+  id: ID!
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+type Root {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Fetches objects given their IDs"""
+  nodes(
+    """The IDs of objects"""
+    ids: [ID!]!
+  ): [Node]!
+  users: [User]
+}
+
+type User implements Node {
+  """The ID of an object"""
+  id: ID!
+  firstName: String
+  lastName: String
+  getActivities(after: String, first: Int, before: String, last: Int): ActivityConnection
 }

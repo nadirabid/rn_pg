@@ -22,15 +22,24 @@ import { get } from 'lodash'
 // setup Environment
 
 function fetchQuery(operation, variables) {
+  console.log('fetchQuery', operation, variables)
+
   return fetch('http://localhost:8000/graphql', {
     method: 'POST',
-    headers: {}, // Add authentication and other headers here
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }, // Add authentication and other headers here
     body: JSON.stringify({
       query: operation.text, // GraphQL text from input
       variables,
     }),
   }).then(response => {
+    console.log('response', response)
     return response.json()
+  }).catch(error => {
+    console.log('error', error)
+    return error
   })
 }
 
@@ -76,25 +85,29 @@ const styles = StyleSheet.create({
   },
 })
 
+const appQuery = graphql`
+  query AppQuery {
+    me: node(id: "VXNlcjox") {
+      ... on User {
+        firstName
+        lastName
+      }
+    }
+  }
+`
+
 export default class App extends Component<Props, State> {
   render() {
     return (
       <QueryRenderer
         environment={environment}
 
-        query={graphql`
-          query AppQuery {
-            user(id: "VXNlcjox") {
-                firstName
-                lastName
-            }
-          }
-        `}
+        query={appQuery}
 
         variables={{}}
 
         render={({error, props}) => {
-          const user = get(props, 'user', {})
+          const me = get(props, 'me', {})
 
           if (error) {
             return (<Text>{error.message}</Text>)
@@ -105,7 +118,7 @@ export default class App extends Component<Props, State> {
                   Ryden
                 </Text>
                 <Text style={styles.welcome}>
-                  Your name {user.firstName} {user.lastName}
+                  Your name is {me.firstName} {me.lastName}
                 </Text>
                 <Text style={styles.instructions}>
                   {instructions}
@@ -113,6 +126,7 @@ export default class App extends Component<Props, State> {
               </View>
             )
           }
+
           return (<Text>Loading</Text>)
         }}
       />

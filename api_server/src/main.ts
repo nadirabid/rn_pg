@@ -6,13 +6,15 @@ import chalk from 'chalk'
 import { Connection } from 'typeorm'
 import path from 'path'
 import fs from 'fs'
-import { buildSchema } from 'graphql'
+import { buildSchema, printSchema } from 'graphql'
 
 import config from './config'
 import createConnection from './db/createConnection'
 import testQuery from './db/testQuery'
 import schema from './graphql/schema'
 import { Server } from 'http'
+
+// TODO: printSchemaAST
 
 let server: Server
 let conn: Connection
@@ -26,6 +28,9 @@ async function startApp(): Promise<void> {
     console.log(chalk.redBright('Are you sure PostgreSQL is running?'))
     return
   }
+
+  // update schema
+  fs.writeFileSync(`${__dirname}/graphql/schema.graphql`, printSchema(schema))
 
   // setup router
   const router = new Router()
