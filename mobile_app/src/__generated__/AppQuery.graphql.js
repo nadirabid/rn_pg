@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 04dad528d11ed428674f805bb54d30c3
+ * @relayHash 2edae11bcdff5ccd792d811ade10dfaf
  */
 
 /* eslint-disable */
@@ -11,7 +11,7 @@
 import type { ConcreteRequest } from 'relay-runtime';
 export type AppQueryVariables = {| |};
 export type AppQueryResponse = {|
-  +node: ?{|
+  +me: ?{|
     +firstName?: ?string,
     +lastName?: ?string,
   |},
@@ -21,7 +21,7 @@ export type AppQueryResponse = {|
 
 /*
 query AppQuery {
-  node(id: "VXNlcjox") {
+  me: node(id: "VXNlcjox") {
     __typename
     ... on User {
       firstName
@@ -66,7 +66,7 @@ return {
   "operationKind": "query",
   "name": "AppQuery",
   "id": null,
-  "text": "query AppQuery {\n  node(id: \"VXNlcjox\") {\n    __typename\n    ... on User {\n      firstName\n      lastName\n    }\n    id\n  }\n}\n",
+  "text": "query AppQuery {\n  me: node(id: \"VXNlcjox\") {\n    __typename\n    ... on User {\n      firstName\n      lastName\n    }\n    id\n  }\n}\n",
   "metadata": {},
   "fragment": {
     "kind": "Fragment",
@@ -77,7 +77,7 @@ return {
     "selections": [
       {
         "kind": "LinkedField",
-        "alias": null,
+        "alias": "me",
         "name": "node",
         "storageKey": "node(id:\"VXNlcjox\")",
         "args": v0,
@@ -96,7 +96,7 @@ return {
     "selections": [
       {
         "kind": "LinkedField",
-        "alias": null,
+        "alias": "me",
         "name": "node",
         "storageKey": "node(id:\"VXNlcjox\")",
         "args": v0,
@@ -124,5 +124,5 @@ return {
   }
 };
 })();
-(node/*: any*/).hash = '7132a9e564399b0601c3c7ce1dace468';
+(node/*: any*/).hash = 'b4da1c645509a07af06b982075eadbb0';
 module.exports = node;

@@ -4,9 +4,6 @@
     "member-access": false,
     "member-ordering": [
       true,
-      "public-before-private",
-      "static-before-instance",
-      "variables-before-functions"
     ],
     "no-any": false,
     "no-inferrable-types": [false],

@@ -5,13 +5,14 @@
   "scripts": {
     "tsc": "tsc",
     "clean": "rimraf artifacts",
-    "build": "npm run clean && npm run tsc --",
-    "relay": "relay-compiler --src ./src --schema ../api_server/src/graphql/schema.graphql --extensions ts tsx js jsx",
+    "relay": "relay-compiler --src ./build --schema ../api_server/src/graphql/schema.graphql --extensions ts tsx js jsx",
+    "relay:watch": "npm run relay -- --watch",
     "lint": "tslint src/**/*.ts",
-    "watch": "npm run build -- -w",
+    "build": "npm run clean && npm run tsc --",
+    "build:watch": "npm run build -- -w",
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "start:ios": "npm run build && concurrently -r 'npm run watch' 'react-native run-ios --simulator=\"iPhone X\"'",
-    "start:android": "npm run build && concurrently -r 'npm run watch' 'react-native run-android'",
+    "start:ios": "npm run build && concurrently -r 'npm run relay:watch' 'npm run build:watch' 'react-native run-ios --simulator=\"iPhone X\"'",
+    "start:android": "npm run build && concurrently -r 'npm run relay:watch' 'npm run build:watch' 'react-native run-android'",
     "test": "jest --coverage"
   },
   "dependencies": {
