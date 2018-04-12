@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import {
-  Platform,
-  StyleSheet,
   Text,
+  FlatList,
   View,
+  StyleSheet,
 } from 'react-native'
 import {
   graphql,
@@ -46,10 +46,8 @@ function fetchQuery(operation, variables) {
 const source = new RecordSource()
 const store = new Store(source)
 const network = Network.create(fetchQuery) // see note below
-const handlerProvider = undefined
 
 const environment = new Environment({
-  handlerProvider, // Can omit.
   network,
   store,
 })
@@ -59,31 +57,31 @@ const environment = new Environment({
 interface Props {}
 interface State {}
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-})
+// const instructions = Platform.select({
+//   ios: 'Press Cmd+R to reload,\n' +
+//     'Cmd+D or shake for dev menu',
+//   android: 'Double tap R on your keyboard to reload,\n' +
+//     'Shake or press menu button for dev menu',
+// })
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-})
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     backgroundColor: '#F5FCFF',
+//   },
+//   welcome: {
+//     fontSize: 20,
+//     textAlign: 'center',
+//     margin: 10,
+//   },
+//   instructions: {
+//     textAlign: 'center',
+//     color: '#333333',
+//     marginBottom: 5,
+//   },
+// })
 
 const appQuery = graphql`
   query AppQuery {
@@ -91,10 +89,41 @@ const appQuery = graphql`
       ... on User {
         firstName
         lastName
+        getActivities(first: 50) {
+          edges {
+            node {
+              id
+            }
+          }
+        }
       }
     }
   }
 `
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#ccc'
+  },
+  header: {
+    paddingTop: 20,
+    backgroundColor: 'darkturquoise', 
+    alignItems: 'center', 
+    justifyContent: 'center'
+  },
+  container2: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#00ffff',
+  },
+  welcome: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
+  },
+})
 
 export default class App extends Component<Props, State> {
   render() {
@@ -107,22 +136,28 @@ export default class App extends Component<Props, State> {
         variables={{}}
 
         render={({error, props}) => {
-          const me = get(props, 'me', {})
+          const activities: any[] = get(props, 'me.getActivities.edges', [])
+          console.log(activities)
 
           if (error) {
             return (<Text>{error.message}</Text>)
           } else if (props) {
             return (
               <View style={styles.container}>
-                <Text style={styles.welcome}>
-                  Ryden
-                </Text>
-                <Text style={styles.welcome}>
-                  Your name is {me.firstName} {me.lastName}
-                </Text>
-                <Text style={styles.instructions}>
-                  {instructions}
-                </Text>
+                <Text style={styles.welcome}>Ryden</Text>
+                <FlatList
+                  style={{ flex: 1 }}
+                  keyExtractor={(item) => item.node.id}
+                  data={activities}
+                  renderItem={({ item }: { item: any }) => {
+                    console.log('ITEM', item)
+                    return (
+                      <View style={styles.container2}>
+                        <Text style={styles.welcome}>{item.node.id}</Text>
+                      </View>
+                    )
+                  }}
+                />
               </View>
             )
           }
