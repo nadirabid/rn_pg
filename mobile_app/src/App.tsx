@@ -52,36 +52,47 @@ const environment = new Environment({
   store,
 })
 
+// ActivityListItem
+
+interface ActivityListItemProps {
+  id: string
+}
+
+const activityStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginBottom: 15,
+    backgroundColor: '#fff',
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingLeft: 10,
+    paddingRight: 10
+  },
+  title: {
+    fontSize: 15,
+    fontFamily: 'System'
+  },
+  sub: {
+    fontSize: 5,
+    fontFamily: 'System'
+  }
+})
+
+class ActivityListItem extends Component<ActivityListItemProps> {
+  render() {
+    return (
+      <View style={activityStyles.container}>
+        <Text style={activityStyles.title}>Nadir Muzaffar</Text>
+        <Text style={activityStyles.sub}>{this.props.id}</Text>
+      </View>
+    )
+  }
+}
+
 // App component
 
 interface Props {}
 interface State {}
-
-// const instructions = Platform.select({
-//   ios: 'Press Cmd+R to reload,\n' +
-//     'Cmd+D or shake for dev menu',
-//   android: 'Double tap R on your keyboard to reload,\n' +
-//     'Shake or press menu button for dev menu',
-// })
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     backgroundColor: '#F5FCFF',
-//   },
-//   welcome: {
-//     fontSize: 20,
-//     textAlign: 'center',
-//     margin: 10,
-//   },
-//   instructions: {
-//     textAlign: 'center',
-//     color: '#333333',
-//     marginBottom: 5,
-//   },
-// })
 
 const appQuery = graphql`
   query AppQuery {
@@ -103,25 +114,15 @@ const appQuery = graphql`
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#ccc'
+    flex: 1
   },
-  header: {
-    paddingTop: 20,
-    backgroundColor: 'darkturquoise', 
-    alignItems: 'center', 
-    justifyContent: 'center'
-  },
-  container2: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#00ffff',
+  list: {
+    backgroundColor: '#eee'
   },
   welcome: {
     fontSize: 20,
     textAlign: 'center',
-    margin: 10,
+    marginTop: '9%',
   },
 })
 
@@ -137,7 +138,6 @@ export default class App extends Component<Props, State> {
 
         render={({error, props}) => {
           const activities: any[] = get(props, 'me.getActivities.edges', [])
-          console.log(activities)
 
           if (error) {
             return (<Text>{error.message}</Text>)
@@ -146,15 +146,12 @@ export default class App extends Component<Props, State> {
               <View style={styles.container}>
                 <Text style={styles.welcome}>Ryden</Text>
                 <FlatList
-                  style={{ flex: 1 }}
+                  style={styles.list}
                   keyExtractor={(item) => item.node.id}
                   data={activities}
                   renderItem={({ item }: { item: any }) => {
-                    console.log('ITEM', item)
                     return (
-                      <View style={styles.container2}>
-                        <Text style={styles.welcome}>{item.node.id}</Text>
-                      </View>
+                      <ActivityListItem id={item.node.id} />
                     )
                   }}
                 />
