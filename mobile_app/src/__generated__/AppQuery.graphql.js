@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 2edae11bcdff5ccd792d811ade10dfaf
+ * @relayHash 0650598a03889ffa747a83b19edee675
  */
 
 /* eslint-disable */
@@ -14,6 +14,13 @@ export type AppQueryResponse = {|
   +me: ?{|
     +firstName?: ?string,
     +lastName?: ?string,
+    +getActivities?: ?{|
+      +edges: ?$ReadOnlyArray<?{|
+        +node: ?{|
+          +id: string,
+        |},
+      |}>,
+    |},
   |},
 |};
 */
@@ -26,6 +33,13 @@ query AppQuery {
     ... on User {
       firstName
       lastName
+      getActivities(first: 50) {
+        edges {
+          node {
+            id
+          }
+        }
+      }
     }
     id
   }
@@ -42,6 +56,13 @@ var v0 = [
   }
 ],
 v1 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "id",
+  "args": null,
+  "storageKey": null
+},
+v2 = {
   "kind": "InlineFragment",
   "type": "User",
   "selections": [
@@ -58,6 +79,47 @@ v1 = {
       "name": "lastName",
       "args": null,
       "storageKey": null
+    },
+    {
+      "kind": "LinkedField",
+      "alias": null,
+      "name": "getActivities",
+      "storageKey": "getActivities(first:50)",
+      "args": [
+        {
+          "kind": "Literal",
+          "name": "first",
+          "value": 50,
+          "type": "Int"
+        }
+      ],
+      "concreteType": "ActivityConnection",
+      "plural": false,
+      "selections": [
+        {
+          "kind": "LinkedField",
+          "alias": null,
+          "name": "edges",
+          "storageKey": null,
+          "args": null,
+          "concreteType": "ActivityEdge",
+          "plural": true,
+          "selections": [
+            {
+              "kind": "LinkedField",
+              "alias": null,
+              "name": "node",
+              "storageKey": null,
+              "args": null,
+              "concreteType": "Activity",
+              "plural": false,
+              "selections": [
+                v1
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 };
@@ -66,7 +128,7 @@ return {
   "operationKind": "query",
   "name": "AppQuery",
   "id": null,
-  "text": "query AppQuery {\n  me: node(id: \"VXNlcjox\") {\n    __typename\n    ... on User {\n      firstName\n      lastName\n    }\n    id\n  }\n}\n",
+  "text": "query AppQuery {\n  me: node(id: \"VXNlcjox\") {\n    __typename\n    ... on User {\n      firstName\n      lastName\n      getActivities(first: 50) {\n        edges {\n          node {\n            id\n          }\n        }\n      }\n    }\n    id\n  }\n}\n",
   "metadata": {},
   "fragment": {
     "kind": "Fragment",
@@ -84,7 +146,7 @@ return {
         "concreteType": null,
         "plural": false,
         "selections": [
-          v1
+          v2
         ]
       }
     ]
@@ -110,19 +172,13 @@ return {
             "args": null,
             "storageKey": null
           },
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "name": "id",
-            "args": null,
-            "storageKey": null
-          },
-          v1
+          v1,
+          v2
         ]
       }
     ]
   }
 };
 })();
-(node/*: any*/).hash = 'b4da1c645509a07af06b982075eadbb0';
+(node/*: any*/).hash = 'abc904eaa38fabed99ad9ec9160786bd';
 module.exports = node;
