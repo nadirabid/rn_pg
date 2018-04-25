@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "relay": "relay-compiler --src ./src --schema ../ryden/api_server/src/graphql/schema.graphql --extensions ts tsx js jsx",
+    "relay": "relay-compiler --src ./src --schema ../api_server/src/graphql/schema.graphql --extensions ts tsx js jsx",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "start:ios": "react-native run-ios --simulator=\"iPhone X\"",
     "test": "jest"
