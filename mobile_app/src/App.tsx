@@ -126,6 +126,16 @@ const styles = StyleSheet.create({
   },
 })
 
+export class Test extends Component {
+  render() {
+    return (
+      <View>
+        <Text>Hello</Text>
+      </View>
+    )
+  }
+}
+
 export default class App extends Component<Props, State> {
   render() {
     return (
