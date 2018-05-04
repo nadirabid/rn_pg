@@ -25,6 +25,7 @@ export default class User {
 
     let query = activityRepository
       .createQueryBuilder('activity') // this is the Alias. Alias is what you're selecting
+      .orderBy('activity.id', 'DESC')
       .select()
       .where(`activity.user = ${this.id}`)
 

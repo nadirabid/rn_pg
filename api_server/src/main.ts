@@ -7,12 +7,12 @@ import { Connection } from 'typeorm'
 import path from 'path'
 import fs from 'fs'
 import { buildSchema, printSchema } from 'graphql'
+import { Server } from 'http'
 
 import config from './config'
 import createConnection from './db/createConnection'
 import testQuery from './db/testQuery'
 import schema from './graphql/schema'
-import { Server } from 'http'
 
 // TODO: printSchemaAST
 

@@ -6,6 +6,8 @@ import {
   GraphQLNonNull,
   GraphQLID,
   GraphQLSchema,
+  GraphQLInt,
+  GraphQLScalarType,
 } from 'graphql'
 import {
   nodeDefinitions,
@@ -59,6 +61,18 @@ const ActivityType: GraphQLObjectType = new GraphQLObjectType({
   interfaces: [ nodeInterface ],
   fields: () => ({
     id: globalIdField('Activity'),
+    created: {
+      type: GraphQLString,
+    },
+    modified: {
+      type: GraphQLString,
+    },
+    duration: {
+      type: GraphQLInt,
+      resolve: (activity: Activity) => {
+        return 0
+      },
+    },
     getUser: {
       type: UserType,
       resolve: (activity: Activity, args: any, ctx: any) => {
@@ -191,6 +205,7 @@ const CreateActivityMutation = mutationWithClientMutationId({
 
     const activity = new Activity()
     activity.user = user
+    activity.duration = 100
 
     await activityRepository.save(activity)
 

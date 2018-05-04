@@ -1,4 +1,12 @@
-import { Entity, ManyToOne, PrimaryGeneratedColumn, Connection } from 'typeorm'
+import {
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Connection,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm'
 import 'reflect-metadata'
 
 import User from './User'
@@ -7,6 +15,18 @@ import User from './User'
 export default class Activity {
     @PrimaryGeneratedColumn()
     id: number
+
+    @CreateDateColumn({ type: 'timestamp' })
+    created: Date
+
+    @UpdateDateColumn({ type: 'timestamp' })
+    modified: Date
+
+    @Column({
+      type: 'interval',
+      nullable: true,
+    })
+    duration: number
 
     @ManyToOne(type => User, (user: User) => user.activities)
     user: User

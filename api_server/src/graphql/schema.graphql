@@ -6,6 +6,9 @@ schema {
 type Activity implements Node {
   """The ID of an object"""
   id: ID!
+  created: String
+  modified: String
+  duration: Int
   getUser: User
 }
 
