@@ -25,8 +25,6 @@ import registerScreens from './screens'
 
 // setup Environment
 
-console.log(Config.API_URL)
-
 function fetchQuery(operation, variables) {
   return fetch(`${Config.API_URL}/graphql`, {
     method: 'POST',
@@ -57,12 +55,9 @@ const environment = new Environment({
 registerScreens(environment)
 
 export default function startApp() {
-  Navigation.startTabBasedApp({
-    tabs: [
-        {
-            label: 'Activities',
-            screen: 'ryden.ActivitiesFeed'
-        }
-    ]
+  Navigation.startSingleScreenApp({
+    screen: {
+      screen: 'ryden.ActivitiesFeed'
+    }
   })
 }

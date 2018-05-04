@@ -43,8 +43,8 @@ class ActivityListItem extends Component<ActivityListItemProps> {
   render() {
     return (
       <View style={activityStyles.container}>
-        <Text style={activityStyles.title}>Nadir Muzaffar</Text>
-        <Text style={activityStyles.sub}>{this.props.id}</Text>
+      <Text style={activityStyles.title}>Nadir Muzaffar</Text>
+      <Text style={activityStyles.sub}>{this.props.id}</Text>
       </View>
     )
   }
@@ -56,21 +56,21 @@ interface Props {}
 interface State {}
 
 const appQuery = graphql`
-  query AppQuery {
-    me: node(id: "VXNlcjox") {
-      ... on User {
-        firstName
-        lastName
-        getActivities(first: 50) {
-          edges {
-            node {
-              id
-            }
+query AppQuery {
+  me: node(id: "VXNlcjox") {
+    ... on User {
+      firstName
+      lastName
+      getActivities(first: 50) {
+        edges {
+          node {
+            id
           }
         }
       }
     }
   }
+}
 `
 
 const styles = StyleSheet.create({
@@ -88,40 +88,40 @@ const styles = StyleSheet.create({
 })
 
 export default (environment: Environment) => {
-    return class App extends Component<Props, State> {
-        render() {
+  return class App extends Component<Props, State> {
+    render() {
+      return (
+        <QueryRenderer
+        environment={environment}
+        query={appQuery}
+        variables={{}}
+        render={({error, props}) => {
+          const activities: any[] = get(props, 'me.getActivities.edges', [])
+          
+          if (error) {
+            return (<Text>{error.message}</Text>)
+          } else if (props) {
             return (
-                <QueryRenderer
-                    environment={environment}
-                    query={appQuery}
-                    variables={{}}
-                    render={({error, props}) => {
-                        const activities: any[] = get(props, 'me.getActivities.edges', [])
-
-                        if (error) {
-                            return (<Text>{error.message}</Text>)
-                        } else if (props) {
-                            return (
-                            <View style={styles.container}>
-                                <Text style={styles.welcome}>Ryden</Text>
-                                <FlatList
-                                style={styles.list}
-                                keyExtractor={(item) => item.node.id}
-                                data={activities}
-                                renderItem={({ item }: { item: any }) => {
-                                    return (
-                                    <ActivityListItem id={item.node.id} />
-                                    )
-                                }}
-                                />
-                            </View>
-                            )
-                        }
-
-                        return (<Text>Loading</Text>)
-                    }}
-                />
+              <View style={styles.container}>
+              <Text style={styles.welcome}>Ryden</Text>
+              <FlatList
+              style={styles.list}
+              keyExtractor={(item) => item.node.id}
+              data={activities}
+              renderItem={({ item }: { item: any }) => {
+                return (
+                  <ActivityListItem id={item.node.id} />
+                )
+              }}
+              />
+              </View>
             )
-        }
+          }
+          
+          return (<Text>Loading</Text>)
+        }}
+        />
+      )
     }
+  }
 }
