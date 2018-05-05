@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 0650598a03889ffa747a83b19edee675
+ * @relayHash 638d97251d68169676ef948739fc386c
  */
 
 /* eslint-disable */
@@ -9,8 +9,8 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-export type AppQueryVariables = {| |};
-export type AppQueryResponse = {|
+export type ActivitiesFeed_QueryVariables = {| |};
+export type ActivitiesFeed_QueryResponse = {|
   +me: ?{|
     +firstName?: ?string,
     +lastName?: ?string,
@@ -27,7 +27,7 @@ export type AppQueryResponse = {|
 
 
 /*
-query AppQuery {
+query ActivitiesFeed_Query {
   me: node(id: "VXNlcjox") {
     __typename
     ... on User {
@@ -126,13 +126,13 @@ v2 = {
 return {
   "kind": "Request",
   "operationKind": "query",
-  "name": "AppQuery",
+  "name": "ActivitiesFeed_Query",
   "id": null,
-  "text": "query AppQuery {\n  me: node(id: \"VXNlcjox\") {\n    __typename\n    ... on User {\n      firstName\n      lastName\n      getActivities(first: 50) {\n        edges {\n          node {\n            id\n          }\n        }\n      }\n    }\n    id\n  }\n}\n",
+  "text": "query ActivitiesFeed_Query {\n  me: node(id: \"VXNlcjox\") {\n    __typename\n    ... on User {\n      firstName\n      lastName\n      getActivities(first: 50) {\n        edges {\n          node {\n            id\n          }\n        }\n      }\n    }\n    id\n  }\n}\n",
   "metadata": {},
   "fragment": {
     "kind": "Fragment",
-    "name": "AppQuery",
+    "name": "ActivitiesFeed_Query",
     "type": "Root",
     "metadata": null,
     "argumentDefinitions": [],
@@ -153,7 +153,7 @@ return {
   },
   "operation": {
     "kind": "Operation",
-    "name": "AppQuery",
+    "name": "ActivitiesFeed_Query",
     "argumentDefinitions": [],
     "selections": [
       {
@@ -180,5 +180,5 @@ return {
   }
 };
 })();
-(node/*: any*/).hash = 'abc904eaa38fabed99ad9ec9160786bd';
+(node/*: any*/).hash = '09b7ad8ac21316dc0d8ffc1610162c62';
 module.exports = node;

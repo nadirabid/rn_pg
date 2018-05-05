@@ -1,4 +1,8 @@
 {
+  "filesGlob": [
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
   "compilerOptions": {
     "target": "es2015",
     "module": "es2015",
