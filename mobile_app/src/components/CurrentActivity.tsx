@@ -26,6 +26,7 @@ const currentActivityStyles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingBottom: 150,
   },
   controls: {
     height: 50,
@@ -34,9 +35,14 @@ const currentActivityStyles = StyleSheet.create({
 })
 
 const timerStyles = StyleSheet.create({
-  text: {
-    fontSize: 30
-  }
+  number: {
+    fontSize: 60,
+    fontFamily: 'Oswald-Regular',
+  },
+  unit: {
+    fontSize: 20,
+    fontFamily: 'System',
+  },
 })
 
 export default function(environment: Environment) {
@@ -49,12 +55,39 @@ export default function(environment: Environment) {
       navBarBackgroundColor: 'white',
     };
 
+    get hours() {
+      return '00'
+    }
+
+    get minutes() {
+      return '27'
+    }
+
+    get seconds() {
+      return '56'
+    }
+
+    get timer() {
+      return (
+        <Text>
+          <Text style={timerStyles.number}>{this.hours}</Text>
+          <Text style={timerStyles.unit}>h</Text>
+          <Text style={timerStyles.number}>{this.minutes}</Text>
+          <Text style={timerStyles.unit}>m</Text>
+          <Text style={timerStyles.number}>{this.seconds}</Text>
+          <Text style={timerStyles.unit}>s</Text>
+        </Text>
+      )
+    }
+
     render() {
       return (
         <View style={currentActivityStyles.container}>
           <View style={currentActivityStyles.data}>
             <View style={currentActivityStyles.timer}>
-              <Text style={timerStyles.text}>00h00m00s</Text>
+              <Text style={timerStyles.text}>
+                {this.timer}
+              </Text>
             </View>
             <View>
               <View><Text>Heart</Text></View>
