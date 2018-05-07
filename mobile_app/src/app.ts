@@ -57,7 +57,7 @@ registerScreens(environment)
 export default function startApp() {
   Navigation.startSingleScreenApp({
     screen: {
-      screen: 'ryden.ActivitiesFeed'
-    }
+      screen: 'ryden.CurrentActivity',
+    },
   })
 }
