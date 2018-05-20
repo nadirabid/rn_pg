@@ -11,6 +11,8 @@ import {
   QueryRenderer,
 } from 'react-relay'
 import { Environment } from 'relay-runtime'
+import moment from 'moment'
+import { DateTime, Duration } from 'luxon'
 
 const currentActivityStyles = StyleSheet.create({
   container: {
@@ -36,7 +38,7 @@ const currentActivityStyles = StyleSheet.create({
 
 const timerStyles = StyleSheet.create({
   number: {
-    fontSize: 60,
+    fontSize: 70,
     fontFamily: 'Oswald-Regular',
   },
   unit: {
@@ -55,16 +57,56 @@ export default function(environment: Environment) {
       navBarBackgroundColor: 'white',
     };
 
-    get hours() {
-      return '00'
+    state = {
+      startTime: undefined,
+      duration: undefined,
     }
 
-    get minutes() {
-      return '27'
+    intervalHandle = undefined
+
+    componentDidMount() {
+      const startTime = DateTime.local()
+      const duration = DateTime.local().diff(startTime)
+
+      this.setState({
+        startTime: startTime,
+        duration: duration
+      })
+
+      this.intervalHandle = setInterval(() => {
+        const duration = DateTime.local().diff(this.state.startTime)
+        this.setState({ 
+          duration: duration.shiftTo('hours', 'minutes', 'seconds', 'milliseconds').toObject()
+        })
+      }, 1000)
+    }
+
+    componentWillUnmount() {
+      clearInterval(this.intervalHandle)
+    }
+
+    get hours() {
+      if (this.state.duration === undefined) {
+        return '00'
+      }
+
+      return this.state.duration.hours
+    }
+
+    get minutes() { 
+      if (this.state.duration === undefined) {
+        return '00'
+      }
+
+      return this.state.duration.minutes
     }
 
     get seconds() {
-      return '56'
+      if (this.state.duration === undefined) {
+        return '00'
+      }
+
+      return this.state.duration.seconds
     }
 
     get timer() {
@@ -85,9 +127,7 @@ export default function(environment: Environment) {
         <View style={currentActivityStyles.container}>
           <View style={currentActivityStyles.data}>
             <View style={currentActivityStyles.timer}>
-              <Text style={timerStyles.text}>
-                {this.timer}
-              </Text>
+              {this.timer}
             </View>
             <View>
               <View><Text>Heart</Text></View>
