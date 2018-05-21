@@ -12,7 +12,6 @@
     "babel-plugin-relay": "^1.5.0",
     "lodash": "^4.17.5",
     "luxon": "^1.2.1",
-    "moment": "^2.22.1",
     "react": "16.3.1",
     "react-native": "0.55.3",
     "react-native-config": "^0.11.5",
@@ -22,7 +21,6 @@
   "devDependencies": {
     "@types/lodash": "^4.14.107",
     "@types/luxon": "^0.5.2",
-    "@types/moment": "^2.13.0",
     "@types/react": "^16.3.12",
     "@types/react-native": "^0.55.4",
     "@types/react-native-navigation": "^1.1.8",

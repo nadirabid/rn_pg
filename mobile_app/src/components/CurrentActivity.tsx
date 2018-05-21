@@ -11,8 +11,7 @@ import {
   QueryRenderer,
 } from 'react-relay'
 import { Environment } from 'relay-runtime'
-import moment from 'moment'
-import { DateTime, Duration } from 'luxon'
+import { DateTime, Duration, DurationObject } from 'luxon'
 
 const currentActivityStyles = StyleSheet.create({
   container: {
@@ -37,6 +36,15 @@ const currentActivityStyles = StyleSheet.create({
 })
 
 const timerStyles = StyleSheet.create({
+  numberContainer: {
+    borderColor: '#000000',
+    borderWidth: 0,
+  },
+  unitContainer: {
+    borderColor: '#00ff00',
+    borderWidth: 0,
+    marginBottom: 9,
+  },
   number: {
     fontSize: 70,
     fontFamily: 'Oswald-Regular',
@@ -47,8 +55,14 @@ const timerStyles = StyleSheet.create({
   },
 })
 
+interface Props {}
+interface State {
+  startTime: DateTime,
+  duration: DurationObject
+}
+
 export default function(environment: Environment) {
-  return class CurrentActivity extends Component {
+  return class CurrentActivity extends Component<Props, State> {
     static navigatorStyle = {
       navBarTranslucent: true,
       drawUnderNavBar: false,
@@ -62,19 +76,19 @@ export default function(environment: Environment) {
       duration: undefined,
     }
 
-    intervalHandle = undefined
+    intervalId: number = 0
 
     componentDidMount() {
-      const startTime = DateTime.local()
-      const duration = DateTime.local().diff(startTime)
+      const startTime = DateTime.local().minus({ minutes: 32 })
+      const duration = startTime.diffNow().negate()
 
       this.setState({
         startTime: startTime,
-        duration: duration
+        duration: duration.shiftTo('hours', 'minutes', 'seconds', 'milliseconds').toObject()
       })
 
-      this.intervalHandle = setInterval(() => {
-        const duration = DateTime.local().diff(this.state.startTime)
+      this.intervalId = setInterval(() => {
+        const duration = this.state.startTime.diffNow().negate()
         this.setState({ 
           duration: duration.shiftTo('hours', 'minutes', 'seconds', 'milliseconds').toObject()
         })
@@ -82,12 +96,14 @@ export default function(environment: Environment) {
     }
 
     componentWillUnmount() {
-      clearInterval(this.intervalHandle)
+      clearInterval(this.intervalId)
     }
 
     get hours() {
       if (this.state.duration === undefined) {
         return '00'
+      } else if (this.state.duration.hours < 10) {
+        return `0${this.state.duration.hours}`
       }
 
       return this.state.duration.hours
@@ -96,6 +112,8 @@ export default function(environment: Environment) {
     get minutes() { 
       if (this.state.duration === undefined) {
         return '00'
+      } else if (this.state.duration.minutes < 10) {
+        return `0${this.state.duration.minutes}`
       }
 
       return this.state.duration.minutes
@@ -104,6 +122,8 @@ export default function(environment: Environment) {
     get seconds() {
       if (this.state.duration === undefined) {
         return '00'
+      } else if (this.state.duration.seconds < 10) {
+        return `0${this.state.duration.seconds}`
       }
 
       return this.state.duration.seconds
@@ -111,14 +131,28 @@ export default function(environment: Environment) {
 
     get timer() {
       return (
-        <Text>
-          <Text style={timerStyles.number}>{this.hours}</Text>
-          <Text style={timerStyles.unit}>h</Text>
-          <Text style={timerStyles.number}>{this.minutes}</Text>
-          <Text style={timerStyles.unit}>m</Text>
-          <Text style={timerStyles.number}>{this.seconds}</Text>
-          <Text style={timerStyles.unit}>s</Text>
-        </Text>
+        <View style={currentActivityStyles.timer}>
+          <Text>
+            <View style={timerStyles.numberContainer}>
+              <Text style={timerStyles.number}>{this.hours}</Text>
+            </View>
+            <View style={timerStyles.unitContainer}>
+              <Text style={timerStyles.unit}>h</Text>
+            </View>
+            <View style={timerStyles.numberContainer}>
+              <Text style={timerStyles.number}>{this.minutes}</Text>
+            </View>
+            <View style={timerStyles.unitContainer}>
+              <Text style={timerStyles.unit}>m</Text>
+            </View>
+            <View style={timerStyles.numberContainer}>
+              <Text style={timerStyles.number}>{this.seconds}</Text>
+            </View>
+            <View style={timerStyles.unitContainer}>
+              <Text style={timerStyles.unit}>s</Text>
+            </View>
+          </Text>
+        </View>
       )
     }
 
@@ -126,9 +160,7 @@ export default function(environment: Environment) {
       return (
         <View style={currentActivityStyles.container}>
           <View style={currentActivityStyles.data}>
-            <View style={currentActivityStyles.timer}>
-              {this.timer}
-            </View>
+            {this.timer}
             <View>
               <View><Text>Heart</Text></View>
             </View>
