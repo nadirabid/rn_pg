@@ -13,29 +13,38 @@ import {
 import { Environment } from 'relay-runtime'
 import { DateTime, Duration, DurationObject } from 'luxon'
 
+import Button from './Button'
+
 const currentActivityStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'steelblue',
-    alignItems: 'stretch',
   },
   data: {
     flex: 1,
     backgroundColor: 'white',
   },
-  timer: {
+  controls: {
+    flex: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    height: 70,
+  },
+})
+
+const timerButtonStyles = StyleSheet.create({
+  button: {
+    marginBottom: 10,
+    width: 60,
+  },
+})
+
+const timerStyles = StyleSheet.create({
+  container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingBottom: 150,
   },
-  controls: {
-    height: 50,
-    backgroundColor: 'powderblue',
-  },
-})
-
-const timerStyles = StyleSheet.create({
   numberContainer: {
     borderColor: '#000000',
     borderWidth: 0,
@@ -57,8 +66,8 @@ const timerStyles = StyleSheet.create({
 
 interface Props {}
 interface State {
-  startTime: DateTime,
-  duration: DurationObject
+  startTime?: DateTime,
+  duration?: DurationObject
 }
 
 export default function(environment: Environment) {
@@ -78,7 +87,13 @@ export default function(environment: Environment) {
 
     intervalId: number = 0
 
-    componentDidMount() {
+    componentWillUnmount() {
+      if (this.intervalId) {
+        clearInterval(this.intervalId)
+      }
+    }
+
+    handleStartTimer = (GestureResponderEvent) => {
       const startTime = DateTime.local()
       const duration = startTime.diffNow().negate()
 
@@ -95,8 +110,9 @@ export default function(environment: Environment) {
       }, 1000)
     }
 
-    componentWillUnmount() {
+    handleStopTimer = (GestureResponderEvent) => {
       clearInterval(this.intervalId)
+      this.intervalId = undefined
     }
 
     get hours() {
@@ -131,7 +147,7 @@ export default function(environment: Environment) {
 
     get timer() {
       return (
-        <View style={currentActivityStyles.timer}>
+        <View style={timerStyles.container}>
           <Text>
             <View style={timerStyles.numberContainer}>
               <Text style={timerStyles.number}>{this.hours}</Text>
@@ -156,17 +172,36 @@ export default function(environment: Environment) {
       )
     }
 
+    get timerButton() {
+      if (this.state.startTime !== undefined) {
+        return (
+          <Button 
+            style={timerButtonStyles.button}
+            onPress={this.handleStopTimer}
+          >
+            Stop
+          </Button>
+        )
+      }
+
+      return (
+        <Button 
+          style={timerButtonStyles.button}
+          onPress={this.handleStartTimer}
+        >
+          Start
+        </Button>
+      )
+    }
+
     render() {
       return (
         <View style={currentActivityStyles.container}>
           <View style={currentActivityStyles.data}>
             {this.timer}
-            <View>
-              <View><Text>Heart</Text></View>
-            </View>
           </View>
           <View style={currentActivityStyles.controls}>
-            <Text>Start</Text>
+            {this.timerButton}
           </View>
         </View>
       )

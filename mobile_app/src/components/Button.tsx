@@ -42,28 +42,27 @@ const styles = StyleSheet.create({
 });
 
 interface Props {
-  style: StyleProp<ViewStyle>
-  textStyle: StyleProp<TextStyle>
-  disabledStyle: StyleProp<TextStyle>
-  children: ReactNode[]
-  testID: string
-  accessibilityLabel: string
-  activeOpacity: number
-  allowFontScaling: boolean
-  isLoading: boolean
-  isDisabled: boolean
-  activityIndicatorColor: string
-  delayLongPress: number
-  delayPressIn: number
-  delayPressOut: number
-  onPress: (GestureResponderEvent) => void
-  onLongPress: (GestureResponderEvent) => void
-  onPressIn: (GestureResponderEvent) => void
-  onPressOut: (GestureResponderEvent) => void
-  background: any
+  style?: StyleProp<ViewStyle>
+  textStyle?: StyleProp<TextStyle>
+  disabledStyle?: StyleProp<TextStyle>
+  children: ReactNode|string|number[]
+  testID?: string
+  accessibilityLabel?: string
+  activeOpacity?: number
+  allowFontScaling?: boolean
+  isLoading?: boolean
+  isDisabled?: boolean
+  activityIndicatorColor?: string
+  delayLongPress?: number
+  delayPressIn?: number
+  delayPressOut?: number
+  onPress?: (GestureResponderEvent) => void
+  onLongPress?: (GestureResponderEvent) => void
+  onPressIn?: (GestureResponderEvent) => void
+  onPressOut?: (GestureResponderEvent) => void
 }
 
-class Button extends Component<Props> {
+export default class Button extends Component<Props> {
   get children() {
     let childElements: ReactNode[] = []
 
