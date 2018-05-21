@@ -79,7 +79,7 @@ export default function(environment: Environment) {
     intervalId: number = 0
 
     componentDidMount() {
-      const startTime = DateTime.local().minus({ minutes: 32 })
+      const startTime = DateTime.local()
       const duration = startTime.diffNow().negate()
 
       this.setState({
