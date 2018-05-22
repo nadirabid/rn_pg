@@ -230,8 +230,11 @@ export default function(environment: Environment) {
     }
 
     get cancelButton() {
+      const isDisabled = this.totalDurationObject.milliseconds === 0 && this.state.startTime === undefined
+
       return (
         <Button 
+          isDisabled={isDisabled}
           style={timerButtonStyles.button}
           onPress={this.handleCancelTimer}
         >
