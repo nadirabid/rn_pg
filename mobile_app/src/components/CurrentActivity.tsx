@@ -27,14 +27,16 @@ const currentActivityStyles = StyleSheet.create({
     flex: 0,
     flexDirection: 'row',
     justifyContent: 'center',
-    height: 70,
+    height: 120,
   },
 })
 
 const timerButtonStyles = StyleSheet.create({
   button: {
-    marginBottom: 10,
-    width: 60,
+    marginBottom: 20,
+    width: 80,
+    height: 80,
+    borderRadius: 100,
   },
 })
 
@@ -66,8 +68,9 @@ const timerStyles = StyleSheet.create({
 
 interface Props {}
 interface State {
+  currentDurationSegment: Duration,
+  duration: Duration,
   startTime?: DateTime,
-  duration?: DurationObject
 }
 
 export default function(environment: Environment) {
@@ -81,11 +84,12 @@ export default function(environment: Environment) {
     };
 
     state = {
+      currentDurationSegment: Duration.fromMillis(0),
+      duration: Duration.fromMillis(0),
       startTime: undefined,
-      duration: undefined,
     }
 
-    intervalId: number = 0
+    intervalId?: number = 0
 
     componentWillUnmount() {
       if (this.intervalId) {
@@ -99,50 +103,72 @@ export default function(environment: Environment) {
 
       this.setState({
         startTime: startTime,
-        duration: duration.shiftTo('hours', 'minutes', 'seconds', 'milliseconds').toObject()
       })
 
       this.intervalId = setInterval(() => {
-        const duration = this.state.startTime.diffNow().negate()
-        this.setState({ 
-          duration: duration.shiftTo('hours', 'minutes', 'seconds', 'milliseconds').toObject()
+        this.setState({
+          currentDurationSegment: this.state.startTime.diffNow().negate()
         })
       }, 1000)
     }
 
-    handleStopTimer = (GestureResponderEvent) => {
+    handlePauseTimer = (GestureResponderEvent) => {
       clearInterval(this.intervalId)
       this.intervalId = undefined
+
+      this.setState((prevState) => {
+        return {
+          currentDurationSegment: Duration.fromMillis(0),
+          duration: prevState.duration.plus(prevState.currentDurationSegment),
+          startTime: undefined,
+        }
+      })
+    }
+
+    handleCancelTimer = () => {
+      clearInterval(this.intervalId)
+      this.intervalId = undefined
+
+      this.setState({
+        currentDurationSegment: Duration.fromMillis(0),
+        duration: Duration.fromMillis(0),
+        startTime: undefined,
+      })
+    }
+
+    get totalDurationObject(): Duration {
+      const totalDuration = this.state.duration.plus(this.state.currentDurationSegment)
+      return totalDuration.shiftTo('hours', 'minutes', 'seconds', 'milliseconds')
     }
 
     get hours() {
-      if (this.state.duration === undefined) {
-        return '00'
-      } else if (this.state.duration.hours < 10) {
-        return `0${this.state.duration.hours}`
+      const hours = this.totalDurationObject.toObject().hours
+
+      if (hours < 10) {
+        return `0${hours}`
       }
 
-      return this.state.duration.hours
+      return hours
     }
 
-    get minutes() { 
-      if (this.state.duration === undefined) {
-        return '00'
-      } else if (this.state.duration.minutes < 10) {
-        return `0${this.state.duration.minutes}`
+    get minutes() {
+      const minutes = this.totalDurationObject.toObject().minutes
+
+      if (minutes < 10) {
+        return `0${minutes}`
       }
 
-      return this.state.duration.minutes
+      return minutes
     }
 
     get seconds() {
-      if (this.state.duration === undefined) {
-        return '00'
-      } else if (this.state.duration.seconds < 10) {
-        return `0${this.state.duration.seconds}`
+      const seconds = this.totalDurationObject.toObject().seconds
+
+      if (seconds < 10) {
+        return `0${seconds}`
       }
 
-      return this.state.duration.seconds
+      return seconds
     }
 
     get timer() {
@@ -173,13 +199,22 @@ export default function(environment: Environment) {
     }
 
     get timerButton() {
-      if (this.state.startTime !== undefined) {
+      if (this.totalDurationObject.milliseconds === 0 && this.state.startTime === undefined) {
         return (
           <Button 
             style={timerButtonStyles.button}
-            onPress={this.handleStopTimer}
+            onPress={this.handleStartTimer}
           >
-            Stop
+            Start
+          </Button>
+        )
+      } else if (this.state.startTime === undefined) {
+        return (
+          <Button 
+            style={timerButtonStyles.button}
+            onPress={this.handleStartTimer}
+          >
+            Resume
           </Button>
         )
       }
@@ -187,9 +222,20 @@ export default function(environment: Environment) {
       return (
         <Button 
           style={timerButtonStyles.button}
-          onPress={this.handleStartTimer}
+          onPress={this.handlePauseTimer}
         >
-          Start
+          Pause
+        </Button>
+      )
+    }
+
+    get cancelButton() {
+      return (
+        <Button 
+          style={timerButtonStyles.button}
+          onPress={this.handleCancelTimer}
+        >
+          Cancel
         </Button>
       )
     }
@@ -201,6 +247,7 @@ export default function(environment: Environment) {
             {this.timer}
           </View>
           <View style={currentActivityStyles.controls}>
+            {this.cancelButton}
             {this.timerButton}
           </View>
         </View>
