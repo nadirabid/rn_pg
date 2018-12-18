@@ -1,4 +1,6 @@
-# Example project using TypeScript, Node.js, React Native, GraphQL + Relay
+# Sample
+
+Uses TypeScript, React Native, Node.js, GraphQL, Relay
 
 ### Projects
 * [api_server](api_server)
